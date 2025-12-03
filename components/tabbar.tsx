@@ -52,7 +52,7 @@ export const TabBar = () => {
   const activeTab = getActiveTabFromRoute();
 
   return (
-    <div className="fixed bottom-10 left-0 right-0 h-20 grid place-content-center w-full">
+    <div className="md:hidden fixed bottom-10 left-0 right-0 h-20 grid place-content-center w-full">
       <div className="bg-primary rounded-[100px] z-50 px-4 shadow-lg shadow-black/10 backdrop-blur-sm">
         <nav className="flex items-center justify-around py-2 gap-2">
           {navArrayButtons.map((button) => {
@@ -69,7 +69,7 @@ export const TabBar = () => {
                   ${
                     isActive
                       ? "bg-white text-gray-900 shadow-md"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
+                      : "text-gray-600 hover:text-gray-900 "
                   }
                 `}
                 aria-label={button.name}
@@ -78,6 +78,12 @@ export const TabBar = () => {
                 <div className="relative flex items-center justify-center">
                   {!isActive && (
                     <div className="absolute h-9 w-9 rounded-full bg-[#38768D]/80 transition-all duration-300 group-hover:scale-110 group-hover:bg-[#38768D]" />
+                  )}
+
+                  {button.name === "cart" && (
+                    <span className="absolute -top-4 -right-1 w-5 h-5 bg-linear-to-r from-primary to-primary/80 text-white text-xs rounded-full flex items-center justify-center animate-bounce">
+                      3
+                    </span>
                   )}
 
                   <img

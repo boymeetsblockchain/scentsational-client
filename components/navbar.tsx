@@ -52,12 +52,12 @@ export const Navbar = () => {
   };
 
   return (
-    <>
+    <nav className="hidden md:block">
       {/* Top Bar - Announcement */}
-      <div className="bg-linear-to-r from-primary via-primary/90 to-primary text-white text-center py-2 text-sm font-medium">
+      {/* <div className="bg-linear-to-r  from-primary via-primary/90 to-primary text-white text-center py-2 text-sm font-medium">
         🚚 Free shipping on orders over $50 • ✨ Limited Edition Scents
         Available
-      </div>
+      </div> */}
 
       {/* Main Navbar */}
       <motion.nav
@@ -109,7 +109,7 @@ export const Navbar = () => {
                   >
                     <div className="relative">
                       <img
-                        src={isActive ? button.activeIcon : button.activeIcon}
+                        src={button.activeIcon}
                         alt={button.name}
                         className="w-6 h-6 transition-all duration-300 group-hover:scale-110"
                       />
@@ -293,7 +293,7 @@ export const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </nav>
   );
 };
 
