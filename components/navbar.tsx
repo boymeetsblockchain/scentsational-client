@@ -1,75 +1,9 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import SearchInput from "./inputs/search-input";
 import { motion, AnimatePresence } from "motion/react";
-
-const navArrayButtons = [
-  {
-    name: "account",
-    icon: "/icons/account.svg",
-    activeIcon: "/icons/account-active.svg",
-    route: "/account",
-  },
-  {
-    name: "wishlist",
-    icon: "/icons/wishlist.svg",
-    activeIcon: "/icons/wishlist-active.svg",
-    route: "/wishlist",
-  },
-  {
-    name: "cart",
-    icon: "/icons/cart.svg",
-    activeIcon: "/icons/cart-active.svg",
-    route: "/cart",
-  },
-];
-
-const dropDownCategory = [
-  {
-    name: "Perfume",
-    icon: "🌸",
-    color: "from-rose-100 to-pink-100",
-    subcategories: [
-      { name: "Lattafa Asad", route: "/perfume/lattafa-asad" },
-      {
-        name: "Armaf Club de Nuit Intense",
-        route: "/perfume/armaf-club-de-nuit",
-      },
-      { name: "Rasasi Hawas", route: "/perfume/rasasi-hawas" },
-    ],
-  },
-  {
-    name: "Body Mist",
-    icon: "💫",
-    color: "from-purple-100 to-violet-100",
-    subcategories: [
-      { name: "Armaf Vanity Femme", route: "/body-mist/armaf-vanity" },
-      { name: "Lattafa Yara", route: "/body-mist/lattafa-yara" },
-      { name: "Ajmal Wisal", route: "/body-mist/ajmal-wisal" },
-    ],
-  },
-  {
-    name: "Fragrance",
-    icon: "🌹",
-    color: "from-amber-100 to-orange-100",
-    subcategories: [
-      { name: "Oud Wood", route: "/fragrance/oud-wood" },
-      { name: "Arabian Nights", route: "/fragrance/arabian-nights" },
-      { name: "Musk Al Ghazal", route: "/fragrance/musk-al-ghazal" },
-    ],
-  },
-  {
-    name: "Decants",
-    icon: "💧",
-    color: "from-blue-100 to-cyan-100",
-    subcategories: [
-      { name: "Lattafa Khamrah 10ml", route: "/decants/lattafa-khamrah" },
-      { name: "Armaf Hunter Intense 5ml", route: "/decants/armaf-hunter" },
-      { name: "Rasasi La Yuqawam 10ml", route: "/decants/rasasi-la-yuqawam" },
-    ],
-  },
-];
+import { dropDownCategory, navArrayButtons } from "@/data";
 
 export const Navbar = () => {
   const [openCategory, setOpenCategory] = useState<string | null>(null);
@@ -77,6 +11,7 @@ export const Navbar = () => {
   const [activeNav, setActiveNav] = useState<string | null>(null);
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -105,7 +40,7 @@ export const Navbar = () => {
   // Set active nav based on pathname
   useEffect(() => {
     const matchingCategory = dropDownCategory.find((cat) =>
-      cat.subcategories.some((sub) =>
+      cat.subcategories?.some((sub) =>
         pathname.startsWith(sub.route.split("/")[1])
       )
     );
@@ -119,8 +54,8 @@ export const Navbar = () => {
   return (
     <>
       {/* Top Bar - Announcement */}
-      <div className="bg-linear-to-r from-amber-900 via-amber-800 to-amber-900 text-white text-center py-2 text-sm font-medium">
-        🎁 Free shipping on orders over $50 • Limited Edition Holiday Scents
+      <div className="bg-linear-to-r from-primary via-primary/90 to-primary text-white text-center py-2 text-sm font-medium">
+        🚚 Free shipping on orders over $50 • ✨ Limited Edition Scents
         Available
       </div>
 
@@ -131,7 +66,7 @@ export const Navbar = () => {
         transition={{ duration: 0.5 }}
         className={`sticky top-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? "bg-white/95 backdrop-blur-xl shadow-2xl shadow-black/10 border-b border-amber-100"
+            ? "bg-white/95 backdrop-blur-xl shadow-2xl shadow-black/10 border-b border-primary/10"
             : "bg-linear-to-b from-white via-white/95 to-white/90"
         }`}
       >
@@ -141,12 +76,12 @@ export const Navbar = () => {
             {/* Logo */}
             <div className="flex items-center gap-2">
               <div className="relative">
-                <div className="absolute -inset-4 bg-linear-to-r from-amber-400 to-rose-400 rounded-full blur opacity-30 animate-pulse"></div>
-                <h1 className="text-3xl font-bold bg-linear-to-r from-amber-800 via-rose-700 to-amber-800 bg-clip-text text-transparent relative z-10">
+                <div className="absolute -inset-4 bg-linear-to-r from-primary/40 to-primary/60 rounded-full blur opacity-30 animate-pulse"></div>
+                <h1 className="text-3xl font-bold bg-linear-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent relative z-10">
                   Scentsational
                 </h1>
               </div>
-              <span className="text-xs bg-linear-to-r from-amber-500 to-rose-500 text-white px-2 py-0.5 rounded-full font-medium">
+              <span className="text-xs bg-linear-to-r from-primary to-primary/80 text-white px-2 py-0.5 rounded-full font-medium">
                 Luxury
               </span>
             </div>
@@ -165,21 +100,21 @@ export const Navbar = () => {
                     key={button.name}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => console.log(`Navigate to ${button.route}`)}
+                    onClick={() => router.push(`${button.route}`)}
                     className={`relative group flex flex-col items-center p-2 rounded-xl transition-all duration-300 ${
                       isActive
-                        ? "text-amber-700 bg-linear-to-br from-amber-50 to-rose-50 shadow-lg"
-                        : "text-gray-600 hover:text-amber-700 hover:bg-amber-50"
+                        ? "text-primary bg-linear-to-br from-primary/10 to-primary/20 shadow-lg"
+                        : "text-gray-600 hover:text-primary hover:bg-primary/5"
                     }`}
                   >
                     <div className="relative">
                       <img
-                        src={isActive ? button.activeIcon : button.icon}
+                        src={isActive ? button.activeIcon : button.activeIcon}
                         alt={button.name}
                         className="w-6 h-6 transition-all duration-300 group-hover:scale-110"
                       />
                       {button.name === "cart" && (
-                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-linear-to-r from-rose-500 to-amber-500 text-white text-xs rounded-full flex items-center justify-center animate-bounce">
+                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-linear-to-r from-primary to-primary/80 text-white text-xs rounded-full flex items-center justify-center animate-bounce">
                           3
                         </span>
                       )}
@@ -190,7 +125,7 @@ export const Navbar = () => {
                     {isActive && (
                       <motion.div
                         layoutId="navIndicator"
-                        className="absolute bottom-0 w-1/2 h-0.5 bg-linear-to-r from-amber-500 to-rose-500 rounded-full"
+                        className="absolute bottom-0 w-1/2 h-0.5 bg-linear-to-r from-primary to-primary/70 rounded-full"
                       />
                     )}
                   </motion.button>
@@ -201,7 +136,7 @@ export const Navbar = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-5 py-2 bg-linear-to-r from-amber-600 to-amber-700 text-white rounded-full text-sm font-semibold shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 transition-all duration-300"
+                className="px-5 py-2 bg-linear-to-r from-primary to-primary/90 text-white rounded-full text-sm font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300"
               >
                 Sign In
               </motion.button>
@@ -221,17 +156,17 @@ export const Navbar = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => toggleCategory(cat.name)}
-                      className={`flex items-center gap-2 px-5 py-3 rounded-full transition-all duration-300 ${
+                      className={`flex items-center gap-2 px-4 py-3 rounded-full transition-all duration-300 ${
                         isActive || isOpen
                           ? `bg-linear-to-r ${cat.color} text-gray-900 shadow-lg`
-                          : "text-gray-700 hover:text-gray-900 hover:bg-linear-to-r hover:from-gray-50 hover:to-gray-100"
+                          : "text-gray-700 hover:text-primary hover:bg-linear-to-r hover:from-gray-50 hover:to-gray-100"
                       }`}
                     >
                       <span className="text-lg">{cat.icon}</span>
-                      <span className="font-medium">{cat.name}</span>
+                      <span className="font-medium text-sm">{cat.name}</span>
                       <motion.span
                         animate={{ rotate: isOpen ? 180 : 0 }}
-                        className="text-gray-500"
+                        className="text-gray-500 text-xs ml-1"
                       >
                         ▼
                       </motion.span>
@@ -240,7 +175,7 @@ export const Navbar = () => {
                       {isActive && (
                         <motion.div
                           layoutId="categoryIndicator"
-                          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-linear-to-r from-amber-500 to-rose-500 rounded-full"
+                          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-linear-to-r from-primary to-primary/70 rounded-full"
                         />
                       )}
                     </motion.button>
@@ -259,13 +194,13 @@ export const Navbar = () => {
                         >
                           {/* Decorative header */}
                           <div
-                            className={`absolute top-0 left-0 right-0 h-2 bg-linear-to-r ${cat.color} rounded-t-2xl`}
+                            className={`absolute top-0 left-0 right-0 h-2 bg-linear-to-r ${cat.linear} rounded-t-2xl`}
                           />
 
                           <div className="flex items-start gap-6">
                             {/* Icon Section */}
                             <div
-                              className={`p-4 rounded-xl bg-linear-to-br ${cat.color}`}
+                              className={`p-4 rounded-xl bg-linear-to-br ${cat.linear}`}
                             >
                               <span className="text-3xl">{cat.icon}</span>
                             </div>
@@ -274,13 +209,13 @@ export const Navbar = () => {
                             <div className="flex-1">
                               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 {cat.name}
-                                <span className="text-xs bg-linear-to-r from-amber-500 to-rose-500 text-white px-2 py-1 rounded-full">
+                                <span className="text-xs bg-linear-to-r from-primary to-primary/80 text-white px-2 py-1 rounded-full">
                                   Popular
                                 </span>
                               </h3>
 
                               <div className="grid grid-cols-2 gap-3">
-                                {cat.subcategories.map((sub, index) => (
+                                {cat.subcategories?.map((sub, index) => (
                                   <motion.button
                                     key={sub.name}
                                     initial={{ opacity: 0, x: -20 }}
@@ -289,21 +224,20 @@ export const Navbar = () => {
                                     whileHover={{
                                       scale: 1.02,
                                       x: 5,
-                                      backgroundColor:
-                                        "rgba(251, 191, 36, 0.1)",
+                                      backgroundColor: "rgba(1, 70, 96, 0.1)",
                                     }}
                                     onClick={() =>
                                       console.log(`Navigate to ${sub.route}`)
                                     }
-                                    className="group text-left p-3 rounded-lg hover:bg-amber-50 transition-all duration-200 border border-transparent hover:border-amber-200"
+                                    className="group text-left p-3 rounded-lg hover:bg-primary/5 transition-all duration-200 border border-transparent hover:border-primary/20"
                                   >
                                     <div className="flex items-center gap-2">
-                                      <div className="w-2 h-2 rounded-full bg-linear-to-r from-amber-400 to-rose-400 group-hover:scale-150 transition-transform" />
-                                      <span className="font-medium text-gray-800 group-hover:text-amber-700">
+                                      <div className="w-2 h-2 rounded-full bg-linear-to-r from-primary to-primary/70 group-hover:scale-150 transition-transform" />
+                                      <span className="font-medium text-gray-800 group-hover:text-primary">
                                         {sub.name}
                                       </span>
                                     </div>
-                                    <span className="text-xs text-gray-500 mt-1 block group-hover:text-amber-600">
+                                    <span className="text-xs text-gray-500 mt-1 block group-hover:text-primary/80">
                                       Discover exquisite scents →
                                     </span>
                                   </motion.button>
@@ -313,10 +247,10 @@ export const Navbar = () => {
                               {/* View All Button */}
                               <motion.button
                                 whileHover={{ scale: 1.02 }}
-                                className="mt-4 w-full py-3 bg-linear-to-r from-gray-50 to-gray-100 hover:from-amber-50 hover:to-rose-50 text-gray-700 hover:text-amber-700 rounded-lg font-medium transition-all duration-300 border border-gray-200 hover:border-amber-200 flex items-center justify-center gap-2"
+                                className="mt-4 w-full py-3 bg-linear-to-r from-gray-50 to-gray-100 hover:from-primary/10 hover:to-primary/20 text-gray-700 hover:text-primary rounded-lg font-medium transition-all duration-300 border border-gray-200 hover:border-primary/30 flex items-center justify-center gap-2"
                               >
                                 View All {cat.name}
-                                <span className="text-amber-600">→</span>
+                                <span className="text-primary">→</span>
                               </motion.button>
                             </div>
                           </div>
@@ -329,7 +263,7 @@ export const Navbar = () => {
             </div>
 
             {/* Decorative Line */}
-            <div className="absolute -bottom-4 left-0 right-0 h-px bg-linear-to-r from-transparent via-amber-200 to-transparent" />
+            <div className="absolute -bottom-4 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/20 to-transparent" />
           </div>
         </div>
       </motion.nav>
@@ -341,16 +275,16 @@ export const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 bg-white/90 backdrop-blur-md rounded-full px-4 py-2 shadow-lg flex items-center gap-3 border border-amber-100"
+            className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 bg-white/90 backdrop-blur-md rounded-full px-4 py-2 shadow-lg flex items-center gap-3 border border-primary/10"
           >
-            <span className="text-xs font-semibold bg-linear-to-r from-amber-600 to-rose-600 bg-clip-text text-transparent">
+            <span className="text-xs font-semibold bg-linear-to-r from-primary to-primary/80 bg-clip-text text-transparent">
               Scentsational
             </span>
             <div className="flex items-center gap-1">
               {dropDownCategory.slice(0, 3).map((cat) => (
                 <button
                   key={cat.name}
-                  className="text-xs text-gray-600 hover:text-amber-700 px-2 py-1 rounded-full hover:bg-amber-50 transition-colors"
+                  className="text-xs text-gray-600 hover:text-primary px-2 py-1 rounded-full hover:bg-primary/5 transition-colors"
                 >
                   {cat.name}
                 </button>
